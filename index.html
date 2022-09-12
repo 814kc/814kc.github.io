@@ -91,7 +91,7 @@
         </div>
     </div>
     <div class="input-group mb-3 position-fixed" style="bottom:0;">
-        <input  id="calcDiceInput" type="tel" pattern="[0-9]*" class="form-control" placeholder="骰多少" aria-label="Recipient's username" aria-describedby="calcDice" >
+        <input  id="calcDiceInput" type="number" min="1" inputmode="numeric" pattern="[0-9]*"  class="form-control" placeholder="骰多少" aria-label="Recipient's username" aria-describedby="calcDice" >
         <button class="btn btn-primary col-4" type="button" id="calcDice" onclick="getCalculate()">送</button>
     </div>
 </body>
