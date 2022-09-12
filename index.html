@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body { background-color: #dddddd08; }
+        .bg-primary{
+            background-color: #0d6efd!important;
+        }
+        .bg-warning{
+            background-color: #ff8d20!important;
+        }
+        .seat > [class ^= 'col'],
+        #alert{ 
+            min-height: 25vh;
+            text-align: center;
+            font-size: large;
+        }
+        .seat > [class ^= 'col']{
+            line-height: 25vh;
+            word-break: break-all;
+        }
+        
+        .seat > [class ^= 'col'][class *= 'border-']#seat-shang{ border-width: 3px 15px 3px 3px !important; }
+        .seat > [class ^= 'col'][class *= 'border-']#seat-self { border-width: 15px 3px 3px 3px !important; }
+        .seat > [class ^= 'col'][class *= 'border-']#seat-shia { border-width: 3px 3px 3px 15px !important; }
+        .seat > [class ^= 'col'][class *= 'border-']#seat-duei { border-width: 3px 3px 15px 3px !important; }
+    </style>
+    <script type="text/javascript">
+    function getCalculate() {
+        var dice = $( "#calcDiceInput" ).val();
+        var txt = '';
+        var players = ['上家','自己','下家','對家'];
+        var playersID = ['shang','self','shia','duei'];
+        var playersColor = ['success','danger','warning','primary'];
+        var flowerArr = ['東風1花','南風2花','西風3花','北風4花']
+        if(dice!=''){
+            dice = new Number(dice);
+            var grab = dice % 4;
+            if(dice<=8){
+                txt = '右數' + dice+' 抓2'
+            }else if(dice==16){
+                txt = '抓尾2不剩'
+            }else if(dice==17){
+                txt = '尾1頭1'
+            }else if(dice==18){
+                txt = '頭2'
+            }else{
+                txt = '抓2 剩' + ( 18 - dice - 2 )+''
+            }
+            for(var i=0; i<4; i++){
+                $('[id^="seat-"]').removeClass('border-'+playersColor[i]);
+            }
+            $('#seat-'+playersID[grab]).addClass('border-'+playersColor[grab]);
+            $('#alert').html(txt);
+            for(var i=0; i<4; i++){
+                var idx = grab+i;
+                if(idx>=4){ grab = grab - 4 };
+                $('#seat-'+playersID[grab+i]).html('<div class="text-center">'+flowerArr[i]+'<div>');
+            }
+            $( "#calcDiceInput" ).val('');
+        }else{
+            for(var i=0; i<4; i++){
+                $('#seat-'+playersID[i]).html('<span class="badge rounded-pill bg-'+playersColor[i]+'">'+players[i]+'</span>');
+            }
+        }
+    }
+    $( document ).ready(function() {
+        $("#calcDiceInput").on('keyup', function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                getCalculate();
+            }
+        });
+        getCalculate();
+    });
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="getMJ text-center"></div>
+        <div class="getFL text-center"></div>
+        <div class="seat d-flex flex-wrap justify-content-center align-items-center align-self-center">
+            <div class="col-4"></div><div id="seat-duei" class="col-4 border"></div><div class="col-4"></div>
+            <div id="seat-shang" class="col-4 border"></div><div id="alert" class="col-4"></div><div id="seat-shia" class="col-4 border"></div>
+            <div class="col-4"></div><div id="seat-self" class="col-4 border"></div><div class="col-4"></div>
+        </div>
+    </div>
+    <div class="input-group mb-3 position-fixed" style="bottom:0;">
+        <input  id="calcDiceInput" type="number" class="form-control" placeholder="骰多少" aria-label="Recipient's username" aria-describedby="calcDice" >
+        <button class="btn btn-primary col-4" type="button" id="calcDice" onclick="getCalculate()">送</button>
+    </div>
+</body>
+</html>
