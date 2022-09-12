@@ -32,21 +32,43 @@
         .bg-warning{
             background-color: #ff8d20!important;
         }
-        .seat > [class ^= 'col'],
-        #alert{ 
+        #dice{
+            border-radius: 20px 0 20px 20px;
+            font-size: x-large;
+            top: 0;
+            right: 0; 
+        }
+        .seat > [class ^= 'col']{ 
             min-height: 25vh;
             text-align: center;
             font-size: large;
-        }
-        .seat > [class ^= 'col']{
             line-height: 25vh;
             word-break: break-all;
         }
-        
-        .seat > [class ^= 'col'][class *= 'border-']#seat-shang{ border-width: 3px 15px 3px 3px !important; }
-        .seat > [class ^= 'col'][class *= 'border-']#seat-self { border-width: 15px 3px 3px 3px !important; }
-        .seat > [class ^= 'col'][class *= 'border-']#seat-shia { border-width: 3px 3px 3px 15px !important; }
-        .seat > [class ^= 'col'][class *= 'border-']#seat-duei { border-width: 3px 3px 15px 3px !important; }
+        .seat > #seat-shang[class ^= 'col'][class *= 'border-']{ border-width: 3px 15px 3px 3px !important; }
+        .seat > #seat-self[class ^= 'col'][class *= 'border-'] { border-width: 15px 3px 3px 3px !important; }
+        .seat > #seat-shia[class ^= 'col'][class *= 'border-'] { border-width: 3px 3px 3px 15px !important; }
+        .seat > #seat-duei[class ^= 'col'][class *= 'border-'] { border-width: 3px 3px 15px 3px !important; }
+        [id ^= 'seat-']{
+            position: relative;
+            overflow: hidden;
+        }
+        [id ^= 'seat-']::after{
+            z-index: -1;
+            display: block;
+            font-size: 90px;
+            line-height: 1;
+            position: absolute;
+            left: calc((100% - 180px) / 2 );
+            bottom: 10px;
+            white-space: nowrap;
+            font-weight: 900;
+            color: #cccccc33;
+        }
+        #seat-shang::after{ content:'上家'; }
+         #seat-self::after{ content:'自己'; }
+         #seat-shia::after{ content:'下家'; }
+         #seat-duei::after{ content:'對家'; }
     </style>
     <script type="text/javascript">
     function getCalculate() {
@@ -58,6 +80,7 @@
         var flowerArr = ['東風1花','南風2花','西風3花','北風4花']
         if(dice!=''){
             dice = new Number(dice);
+            $('#dice').text('🎲 '+dice)
             var grab = dice % 4;
             if(dice<=8){
                 txt = '右數' + dice+' 抓2'
@@ -98,6 +121,7 @@
     </script>
 </head>
 <body>
+    <div id="dice" class="position-fixed badge bg-success p-2">🎲</div>
     <div class="container d-flex flex-wrap justify-content-center align-items-center mt-2 no-gutters">
         <div class="seat col-12 d-flex flex-wrap justify-content-center align-items-center align-self-center">
             <div class="col-4"></div><div id="seat-duei" class="col-4 border"></div><div class="col-4"></div>
