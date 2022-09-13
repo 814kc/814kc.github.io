@@ -24,6 +24,7 @@
     <meta property="og:image" content="/static/img/share.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <style>
         #switchPage {
             border-radius: 0 20px 20px 20px;
@@ -76,56 +77,6 @@
          #seat-shia::after{ content:'下家'; }
          #seat-duei::after{ content:'對家'; }
     </style>
-    <script type="text/javascript">
-    function getCalculate() {
-        var dice = $( "#calcDiceInput" ).val();
-        var txt = '';
-        var players = ['上家','自己','下家','對家'];
-        var playersID = ['shang','self','shia','duei'];
-        var playersColor = ['success','danger','warning','primary'];
-        var flowerArr = ['東風 1花','南風 2花','西風 3花','北風 4花']
-        if(dice!=''){
-            dice = new Number(dice);
-            $('#dice').text('🎲 '+dice)
-            var grab = dice % 4;
-            if(dice<=8){
-                txt = '右數' + dice+' 抓2'
-            }else if(dice==16){
-                txt = '抓尾2不剩'
-            }else if(dice==17){
-                txt = '尾1頭1'
-            }else if(dice==18){
-                txt = '頭2'
-            }else{
-                txt = '抓2 剩' + ( 18 - dice - 2 )+''
-            }
-            for(var i=0; i<4; i++){
-                $('[id^="seat-"]').removeClass('border-'+playersColor[i]);
-            }
-            $('#seat-'+playersID[grab]).addClass('border-'+playersColor[grab]);
-            $('#alert').html(txt);
-            for(var i=0; i<4; i++){
-                var idx = grab+i;
-                if(idx>=4){ grab = grab - 4 };
-                $('#seat-'+playersID[grab+i]).html('<div class="text-center">'+flowerArr[i]+'<div>');
-                localStorage.setItem('flower',$('#seat-'+playersID[1]+' .text-center').text());
-            }
-            $( "#calcDiceInput" ).val('');
-        }else{
-            for(var i=0; i<4; i++){
-                $('#seat-'+playersID[i]).html('<span class="badge rounded-pill bg-'+playersColor[i]+'">'+players[i]+'</span>');
-            }
-        }
-    }
-    $( document ).ready(function() {
-        $("#calcDiceInput").on('keyup', function (e) {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                getCalculate();
-            }
-        });
-        getCalculate();
-    });
-    </script>
 </head>
 <body>
     <a id="switchPage" class="position-fixed badge bg-success p-2 ps-3" href="/stakes.html">💰</a>
@@ -137,9 +88,88 @@
             <div class="col-4"></div><div id="seat-self" class="col-4 border"></div><div class="col-4"></div>
         </div>
     </div>
+    <div id="diceArr" class="modal fade" tabindex="1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h5 class="modal-title col">骰多少?</h5>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+            </div>
+            <div class="modal-body d-flex flex-wrap"> 
+                <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(3)">3</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(4)">4</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(5)">5</div>
+                <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(6)">6</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(7)">7</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(8)">8</div>
+                <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(9)">9</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(10)">10</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(11)">11</div>
+                <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(12)">12</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(13)">13</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(14)">14</div>
+                <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(15)">15</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(16)">16</div>
+                <div class="btn btn-outline-secondary col-3" onclick="getCalcOperation(17)">17</div>
+                <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(18)">18</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn-close btn btn-secondary col" data-bs-dismiss="modal" ></button>
+            </div>
+          </div>
+        </div>
+      </div>
     <div class="input-group mb-3 position-fixed" style="bottom: -17px;">
-        <input  id="calcDiceInput" type="number" min="1" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="骰多少" aria-describedby="calcDice" >
-        <button class="btn btn-primary col-4" type="button" id="calcDice" onclick="getCalculate()">送</button>
+        <!-- <input  id="calcDiceInput" type="number" min="1" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="骰多少" aria-describedby="calcDice" > -->
+        <button class="btn btn-primary col" type="button" id="calcDice" onclick="getCalcModel()">再一次</button>
     </div>
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $('#diceArr').modal('toggle');
+        });
+        function getCalcModel(){
+            $('#diceArr').modal('toggle');
+        }
+        function getCalcOperation(dice) {
+            var txt = '';
+            var players = ['上家','自己','下家','對家'];
+            var playersID = ['shang','self','shia','duei'];
+            var playersColor = ['success','danger','warning','primary'];
+            var flowerArr = ['東風 1花','南風 2花','西風 3花','北風 4花']
+            if(dice!=''){
+                dice = new Number(dice);
+                $('#dice').text('🎲 '+dice)
+                var grab = dice % 4;
+                if(dice<=8){
+                    txt = '右數' + dice+' 抓2'
+                }else if(dice==16){
+                    txt = '抓尾2不剩'
+                }else if(dice==17){
+                    txt = '尾1頭1'
+                }else if(dice==18){
+                    txt = '頭2'
+                }else{
+                    txt = '抓2 剩' + ( 18 - dice - 2 )+''
+                }
+                for(var i=0; i<4; i++){
+                    $('[id^="seat-"]').removeClass('border-'+playersColor[i]);
+                }
+                $('#seat-'+playersID[grab]).addClass('border-'+playersColor[grab]);
+                $('#alert').html(txt);
+                for(var i=0; i<4; i++){
+                    var idx = grab+i;
+                    if(idx>=4){ grab = grab - 4 };
+                    $('#seat-'+playersID[grab+i]).html('<div class="text-center">'+flowerArr[i]+'<div>');
+                    localStorage.setItem('flower',$('#seat-'+playersID[1]+' .text-center').text());
+                }
+                $( "#calcDiceInput" ).val('');
+            }else{
+                for(var i=0; i<4; i++){
+                    $('#seat-'+playersID[i]).html('<span class="badge rounded-pill bg-'+playersColor[i]+'">'+players[i]+'</span>');
+                }
+            }
+            $('#diceArr').modal('hide');
+        }
+    </script>
 </body>
 </html>
