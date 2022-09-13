@@ -77,7 +77,7 @@
         var players = ['上家','自己','下家','對家'];
         var playersID = ['shang','self','shia','duei'];
         var playersColor = ['success','danger','warning','primary'];
-        var flowerArr = ['東風1花','南風2花','西風3花','北風4花']
+        var flowerArr = ['東風 1花','南風 2花','西風 3花','北風 4花']
         if(dice!=''){
             dice = new Number(dice);
             $('#dice').text('🎲 '+dice)
@@ -102,6 +102,7 @@
                 var idx = grab+i;
                 if(idx>=4){ grab = grab - 4 };
                 $('#seat-'+playersID[grab+i]).html('<div class="text-center">'+flowerArr[i]+'<div>');
+                localStorage.setItem('flower',$('#seat-'+playersID[1]+' .text-center').text());
             }
             $( "#calcDiceInput" ).val('');
         }else{
@@ -130,7 +131,7 @@
         </div>
     </div>
     <div class="input-group mb-3 position-fixed" style="bottom: -17px;">
-        <input  id="calcDiceInput" type="number" min="1" inputmode="numeric" pattern="[0-9]*"  class="form-control" placeholder="骰多少" aria-label="Recipient's username" aria-describedby="calcDice" >
+        <input  id="calcDiceInput" type="number" min="1" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="骰多少" aria-describedby="calcDice" >
         <button class="btn btn-primary col-4" type="button" id="calcDice" onclick="getCalculate()">送</button>
     </div>
 </body>
