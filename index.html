@@ -25,6 +25,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
+        #switchPage {
+            border-radius: 0 20px 20px 20px;
+            font-size: x-large;
+            top: 0;    
+            text-decoration: none;
+        }
         body { background-color: #dddddd08; }
         .bg-primary{
             background-color: #0d6efd!important;
@@ -122,7 +128,8 @@
     </script>
 </head>
 <body>
-    <div id="dice" class="position-fixed badge bg-success p-2">🎲</div>
+    <a id="switchPage" class="position-fixed badge bg-success p-2 ps-3" href="/stakes.html">💰</a>
+    <div id="dice" class="position-fixed badge bg-success p-2 pe-3">🎲</div>
     <div class="container d-flex flex-wrap justify-content-center align-items-center mt-2 no-gutters">
         <div class="seat col-12 d-flex flex-wrap justify-content-center align-items-center align-self-center">
             <div class="col-4"></div><div id="seat-duei" class="col-4 border"></div><div class="col-4"></div>

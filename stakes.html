@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>麻將-懶得算</title>
+    <meta name="keywords" content="麻將,算台數,抓牌">
+    <meta name="description" content="我就懶，機器能做的事不要叫我做">
+    <meta name="theme-color" content="#198754">
+    <meta name="msapplication-navbutton-color" content="#198754">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#198754">
+    <link rel="shortcut icon" type="image/png" href="/static/img/favicon.png">
+    <link rel="apple-touch-icon" href="/static/img/share.png">
+    <link rel="icon" href="/static/img/favicon.png">
+    <meta property="og:title" content="麻將-懶得算-懶得算台數">
+    <meta property="og:description" content="我就懶，機器能做的事不要叫我做">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:type" content="website">
+    <meta property="og:image:alt" content="麻將-懶得算-LOGO">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="256">
+    <meta property="og:image:height" content="256">
+    <meta property="og:image" content="/static/img/share.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body { background-color: #dddddd08; }
+        .bg-primary { background-color: #0d6efd !important; }
+        .bg-warning { background-color: #ff8d20 !important; }
+        .fs-sm{ font-size: small; }
+        #switchPage {
+            border-radius: 0 20px 20px 20px;
+            font-size: x-large;
+            top: 0;    
+            text-decoration: none;
+        }
+        #stakes{
+            border-radius: 20px 0 20px 20px;
+            font-size: x-large;
+            top: 0;
+            right: 0; 
+        }
+        .info{
+            font-size: small;
+            margin-left: 5px;
+            padding: 1px 3px;
+            border: 1px solid #aaa;
+            border-radius: 50px;
+        }
+        .showHelperText{
+            top: 0;
+            right: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        function getCalcStakes() {
+            if( $('.close').length > 0 ){ hiddenInfo() }
+            var dice = $("#calcDiceInput").val();
+            var boxes = $('input[type=checkbox]:checked');
+            var baseBet = 30;
+            var bet = 10;
+            var stakes = 0;
+            boxes.each(function(idx, item) {
+                stakes += item.value*bet;
+            });
+            stakes+=baseBet;
+            $('#stakes').removeClass('d-none').text('$'+stakes);
+            // getInfo('<div class="text-center">$'+stakes+'</div>');
+        }
+        function checked(element){
+            var parent = element.parentElement
+            var el = parent.getElementsByClassName('form-check-input')[0];
+            if(!el.checked){
+                el.checked = true;
+            }else{
+                el.checked = false;
+            }
+        }
+        function getInfo(showHelperText){
+            if( $('.close').length > 0 ){ 
+                hiddenInfo()
+            }else{
+                var close = '<span class="close btn btn-outline-secondary col-12"onclick="hiddenInfo()">❌</span>';
+                $('.showHelperText').removeClass('d-none');
+                $('.showHelperText').html(showHelperText+close);
+            }
+        }
+        function hiddenInfo(showHelperText){
+            $('.showHelperText').addClass('d-none');
+            $('.showHelperText').html('');
+        }
+        function calcN(act){
+            var n = Number($('#remainingDealer').val());
+            var newN = 0;
+            if( Number.isInteger(n) == true ){
+                newN = ( n - 1 ) / 2;
+            }
+            if(act=='+'){
+                newN++
+            }else{
+                newN--
+            }
+            if( newN >= 1){
+                $('#remainingDealer').prop("checked", true);
+                var total =  newN * 2 + 1;
+                $('#remainingDealer').val( total );
+                $('#vn').text( total );
+                $('.howRemaining').text( newN );
+            }
+        }
+        $(document).ready(function () {
+            $('.flowerHelper').text(localStorage.flower)
+        });
+    </script>
+</head>
+<body>
+    <a id="switchPage" class="position-fixed badge bg-primary p-2 ps-3" href="/">🎲</a>
+    <div id="stakes" class="position-fixed badge bg-success d-none p-2 pe-3">$</div>
+    <div class="container seat d-flex flex-wrap">
+        <div class="showHelperText col-12 p-3 position-fixed bg-light d-none" ></div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">天地胡</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="4">
+            <label class="form-check-label" onclick="checked(this)">天胡 24台<span class="info" onclick="getInfo('莊家在牌局第一輪，抓完牌後，立即就胡牌。 (莊家限定)。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="6">
+            <label class="form-check-label" onclick="checked(this)" >地胡 16台<span class="info" onclick="getInfo('其他三家，在第一輪，抓完牌就胡牌。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >人胡 8台<span class="info" onclick="getInfo('牌局一開始，第一輪有人就放槍。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >MIGI 8台<span class="info" onclick="getInfo('在第二圈結束前，假設都沒有吃牌、碰牌的情況下聽牌。')">？</span></label>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">四喜/三元台</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="6">
+            <label class="form-check-label" onclick="checked(this)" >大四喜 16台<span class="info" onclick="getInfo('牌中有東、南、西、北四組刻子。(無論是碰到的，還是自已摸進來皆可算)</br>如：東東東 西西西 南南南 北北北 + 萬或筒所組合的順子與一組對子。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >小四喜 8台<span class="info" onclick="getInfo('牌中一樣由東、南、西、北所組成，但其中一組只有對子。 (無論是碰到的，還是自已摸進來皆可算)</br>如：東東東 西西西 南南南 北北 + 萬或筒所組合的順子。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >大三元 8台<span class="info" onclick="getInfo('牌中有，中、發、白所組合的刻子。 (無論是碰到的，還是自已摸進來皆可算)</br>如：中中中 發發發 白白白 + 萬或筒所組合的順子與一組對子。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="4">
+            <label class="form-check-label" onclick="checked(this)" >小三元 4台<span class="info" onclick="getInfo('牌中有，中、發、白所組合的刻子，但其中一組為對子。 (無論是碰到的，還是自已摸進來皆可算)</br>如：中中中 發發發 白白 + 萬或筒所組合的順子。')">？</span></label>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">清一色</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="6">
+            <label class="form-check-label" onclick="checked(this)" >字一色 16台<span class="info" onclick="getInfo('牌中由「東南西北中發白」字牌所組成。</br>如：東東東 西西西 南南南 中中中 發發發 白白。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >清一色 8台<span class="info" onclick="getInfo('牌中由一種花色所組合，如全萬字、全筒子、全條子</br>如：一萬二萬三萬四萬五萬六萬七萬八萬九萬…..。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="4">
+            <label class="form-check-label" onclick="checked(this)" >混一色 4台<span class="info" onclick="getInfo('牌中只有字牌(東南西北) + 一種花色(萬、筒、條則一)</br>如：一萬二萬三萬 八萬八萬 東東東 西西西 南南南 中中中。')">？</span></label>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">碰碰胡</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="4">
+            <label class="form-check-label" onclick="checked(this)" >碰碰胡 4台<span class="info" onclick="getInfo('牌中全都是對子所組成，沒有任何的順子，可自已摸進來，也可是碰來的。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="2">
+            <label class="form-check-label" onclick="checked(this)" >全求人 2台<span class="info" onclick="getInfo('牌全都是吃或碰，手中只剩下一張牌，並由任一家放砲，才可算為全求人，自摸者不算。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="2">
+            <label class="form-check-label" onclick="checked(this)" >平胡 2台<span class="info" onclick="getInfo('牌中由五組對子 + 一組對子，且無字、無花，聽雙洞才能算平胡。')">？</span></label>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">槓上/海底</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >槓上開花 1台<span class="info" onclick="getInfo('摸到花牌或槓牌後，經補牌，而胡牌者，再多加一台。(可累加自摸台)。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >海底撈月 1台<span class="info" onclick="getInfo('摸到牌局最後一張，恰巧為所要的胡牌棋子，再多加一台。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >海底撈魚 1台<span class="info" onclick="getInfo('摸到海底最後一張，丟出去放槍被胡，再多加一台。')">？</span></label>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">花槓/搶槓</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >八仙過海 8台<span class="info" onclick="getInfo('拿齊8張花牌(春、夏、秋、冬、梅、蘭、竹、菊)即可胡牌。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >七搶一 8台<span class="info" onclick="getInfo('拿齊7張花牌，當其中一家，拿到另一張花牌時，即可胡那一家。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >花槓 1台<span class="info" onclick="getInfo('胡牌時，牌前有四張花牌 (春、夏、秋、冬) 或 (梅、蘭、竹、菊) 可再多加一台。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >搶槓 1台<span class="info" onclick="getInfo('當別家喊槓，正巧補槓的牌，為自已所要胡的牌，就可搶槓胡牌。(明槓)。')">？</span></label>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">暗刻台</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="8">
+            <label class="form-check-label" onclick="checked(this)" >五暗刻 8台<span class="info" onclick="getInfo('牌中有五組刻子(暗槓)，沒碰出去，全在自已的牌內。</br>如：一萬一萬一萬 三筒三筒三筒 七條七條七條 東東東 北北北。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="5">
+            <label class="form-check-label" onclick="checked(this)" >四暗刻 5台<span class="info" onclick="getInfo('牌中有四組刻子(暗槓)，沒碰出去，全在自已的牌內。</br>如：一萬一萬一萬 三筒三筒三筒 七條七條七條 東東東。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="2">
+            <label class="form-check-label" onclick="checked(this)" >三暗刻 2台<span class="info" onclick="getInfo('牌中有三組刻子(暗槓)，沒碰出去，全在自已的牌內。</br>如：一萬一萬一萬 三筒三筒三筒 七條七條七條。')">？</span></label>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">圈風台</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >花牌 1台<span class="info" onclick="getInfo('以開門計算，東(春、梅-1花)、南(夏、蘭-2花)、西(秋、菊-3花)、北(冬、竹-4花)。 (順時間算)</br>如：東家拿到春又拿到梅，就可累計成二台。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >門風台 1台<span class="info" onclick="getInfo('依自已的坐風，比方坐北，拿到北風的刻子，可再加一台。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >圈風台 1台<span class="info" onclick="getInfo('目前是東風圈，拿到東風刻子，可再加一台。')">？</span></label>
+        </div>
+        <div class="flowerHelper fs-3 text-danger text-center col-12"></div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">莊家台</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >莊家 1台<span class="info" onclick="getInfo('做莊者，無論胡牌或放炮 ( 打出的牌被別人胡 ) 都多算一台。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input id="remainingDealer"class="form-check-input" type="checkbox" value="n">
+            <label class="form-check-label" onclick="checked(this)" >連<span class="howRemaining">莊</span>拉<span class="howRemaining">莊</span> <span id="vn">n</span>台<span class="info" onclick="getInfo('莊家胡牌即可連莊，連1拉1為3台，連2拉2為5台，連3拉3為7台….依此類推。')">？</span></label>
+            <div class="btn-group">
+                <button class="btn btn-outline-primary col" type="button" onclick="calcN('-')">-</button>
+                <button class="btn btn-primary col" type="button" onclick="calcN('+')">+</button>
+            </div>
+        </div>
+        <div class="col-12 text-muted mb-2 text-end bg-light fs-sm">自摸台</div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >自摸 1台<span class="info" onclick="getInfo('自已摸到胡牌所要的牌。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >門清 1台<span class="info" onclick="getInfo('不吃、不碰、不槓，全部16張的都在自已牌內。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="3">
+            <label class="form-check-label" onclick="checked(this)" >門清自摸 3台<span class="info" onclick="getInfo('門清又自摸。')">？</span></label>
+        </div>
+        <div class="form-check col-6">
+            <input class="form-check-input" type="checkbox" value="1">
+            <label class="form-check-label" onclick="checked(this)" >單吊 1台<span class="info" onclick="getInfo('只聽一張牌。(含中洞、偏張)。')">？</span></label>
+        </div>
+    </div>
+    <div class="input-group mb-3 position-fixed" style="bottom: -17px;">
+        <button class="btn btn-primary col" type="button" id="calcDice" onclick="getCalcStakes()">送</button>
+    </div>
+</body>
+
+</html>
