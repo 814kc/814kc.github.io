@@ -78,9 +78,9 @@
          #seat-duei::after{ content:'對家'; }
     </style>
 </head>
-<body>
-    <a id="switchPage" class="position-fixed badge bg-success p-2 ps-3" href="/stakes.html">💰</a>
-    <div id="dice" class="position-fixed badge bg-success p-2 pe-3">🎲</div>
+<body class="container">
+    <!-- <a id="switchPage" class="position-absolute top-0 start-0 badge bg-success p-2 ps-3" href="/stakes.html">💰</a>
+    <div id="dice" class="position-absolute top-0 end-0 badge bg-success p-2 pe-3">🎲</div> -->
     <div class="container d-flex flex-wrap justify-content-center align-items-center mt-2 no-gutters">
         <div class="seat col-12 d-flex flex-wrap justify-content-center align-items-center align-self-center">
             <div class="col-4"></div><div id="seat-duei" class="col-4 border"></div><div class="col-4"></div>
@@ -92,8 +92,10 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header text-center">
-              <h5 class="modal-title col">骰多少?</h5>
-              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                <nav class="col-12 nav nav-pills nav-fill">
+                    <a class="nav-link active" aria-current="page" href="#">麻將</a>
+                    <a class="nav-link" href="priceslog.html">物價</a>
+                </nav>
             </div>
             <div class="modal-body d-flex flex-wrap"> 
                 <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(3)">3</div>
@@ -114,13 +116,14 @@
                 <div class="btn btn-outline-danger col-3" onclick="getCalcOperation(18)">18</div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn-close btn btn-secondary col" data-bs-dismiss="modal" ></button>
+                <button type="button" class="btn-close btn btn-secondary col" data-bs-dismiss="modal" ></button>
             </div>
           </div>
         </div>
       </div>
-    <div class="input-group mb-3 position-fixed" style="bottom: -17px;">
-        <!-- <input  id="calcDiceInput" type="number" min="1" inputmode="numeric" pattern="[0-9]*" class="form-control" placeholder="骰多少" aria-describedby="calcDice" > -->
+    <div class="input-group mb-3 position-absolute bottom-0 start-0" style="bottom: -17px;">
+        <a class="btn btn-success col" href="/stakes.html">贏多少</a> 
+        <!-- <input  id="calcDiceInput" type="number" min="1" inputmode="numeric" pattern="[0-9]？*" class="form-control" placeholder="骰多少" aria-describedby="calcDice" > -->
         <button class="btn btn-primary col" type="button" id="calcDice" onclick="getCalcModel()">再一次</button>
     </div>
     <script type="text/javascript">
