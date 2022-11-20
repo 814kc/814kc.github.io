@@ -18,10 +18,10 @@ var app = new Vue({
         self.activeCameraId = cameras[0].id;
         self.scanner.start(cameras[0]);
       } else {
-        console.error('No cameras found.');
+        alert('No cameras found.');
       }
     }).catch(function (e) {
-      console.error(e);
+      alert(e);
     });
   },
   methods: {
